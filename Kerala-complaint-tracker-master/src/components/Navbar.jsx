@@ -48,7 +48,6 @@ const Navbar = () => {
           {(!user || user?.role === 'user') && <Link className="nav-link-tab" to="/" state={{ tab: 'programs' }} onClick={closeMenu}>Programs</Link>}
           {(!user || user?.role === 'user') && <Link className="nav-link-tab" to="/" state={{ tab: 'notifications' }} onClick={closeMenu}>Notifications</Link>}
           {(!user || user?.role === 'user') && <Link className="nav-link-tab" to="/" state={{ tab: 'polls' }} onClick={closeMenu}>Polls</Link>}
-          {user?.role === 'user' && <NavLink to="/complaints/new">New complaint</NavLink>}
           {user?.role === 'staff' && <NavLink to="/staff">Queue</NavLink>}
           {user?.role === 'staff' && <NavLink to="/staff/broadcast">Broadcast</NavLink>}
           {user?.role === 'staff' && <NavLink to="/staff/polls">Polls</NavLink>}

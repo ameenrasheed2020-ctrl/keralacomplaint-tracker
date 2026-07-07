@@ -1,4 +1,4 @@
-import { useState, useLayoutEffect } from 'react'
+import { useState, useEffect, useLayoutEffect } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { LuClipboardList, LuTrendingUp, LuChartBarIncreasing } from 'react-icons/lu'
 import Navbar from '../components/Navbar'
@@ -94,6 +94,23 @@ const Home = () => {
     }
   }, [location.state])
 
+  useEffect(() => {
+    const els = document.querySelectorAll('[data-reveal]')
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible')
+            observer.unobserve(entry.target)
+          }
+        })
+      },
+      { threshold: 0.1 }
+    )
+    els.forEach((el) => observer.observe(el))
+    return () => observer.disconnect()
+  }, [])
+
   return (
     <>
       <Navbar />
@@ -106,12 +123,12 @@ const Home = () => {
         >
           <div className="lp-hero-overlay" />
           <div className="lp-hero-body">
-            <p className="lp-hero-ornament">വേങ്ങര നിയോജകമണ്ഡലം</p>
-            <h1 className="lp-hero-title">
+            <p className="lp-hero-ornament" data-reveal>വേങ്ങര നിയോജകമണ്ഡലം</p>
+            <h1 className="lp-hero-title" data-reveal>
               <span className="lp-hero-mla">K. M. Shaji, MLA</span>
               <span className="lp-hero-tagline">Your Voice in Vengara</span>
             </h1>
-            <p className="lp-hero-desc">
+            <p className="lp-hero-desc" data-reveal>
               A direct channel between the residents of Vengara constituency
               and the MLA office — file grievances, track resolutions, and
               stay informed about programs, notices, and local initiatives.
@@ -143,10 +160,10 @@ const Home = () => {
         {/* ───── MESSAGE FROM MLA ───── */}
         <section className="lp-section lp-section-light">
           <div className="lp-message">
-            <div className="lp-message-image">
+            <div className="lp-message-image" data-reveal>
               <img src={speechPhoto} alt="MLA K. M. Shaji speaking at a public event" loading="lazy" />
             </div>
-            <div className="lp-message-text">
+            <div className="lp-message-text" data-reveal>
               <p className="lp-eyebrow">A word from your MLA</p>
               <h2>Working together for Vengara</h2>
               <p>
@@ -170,7 +187,7 @@ const Home = () => {
 
         {/* ───── PHOTO GALLERY ───── */}
         <section className="lp-section">
-          <div className="lp-section-heading">
+          <div className="lp-section-heading" data-reveal>
             <p className="lp-eyebrow">In the constituency</p>
             <h2>Recent moments from the MLA office</h2>
             <p className="lp-section-sub">
@@ -178,8 +195,8 @@ const Home = () => {
             </p>
           </div>
           <div className="lp-gallery">
-            {moments.map((moment) => (
-              <figure className="lp-gallery-card" key={moment.caption}>
+            {moments.map((moment, i) => (
+              <figure className="lp-gallery-card" key={moment.caption} data-reveal>
                 <div className="lp-gallery-image">
                   <img src={moment.image} alt={moment.caption} loading="lazy" />
                 </div>
@@ -191,7 +208,7 @@ const Home = () => {
 
         {/* ───── SERVICES ───── */}
         <section className="lp-section lp-section-green">
-          <div className="lp-section-heading lp-section-heading-light">
+          <div className="lp-section-heading lp-section-heading-light" data-reveal>
             <p className="lp-eyebrow">Constituency services</p>
             <h2>How we help</h2>
             <p className="lp-section-sub">
@@ -199,8 +216,8 @@ const Home = () => {
             </p>
           </div>
           <div className="lp-services">
-            {services.map((svc) => (
-              <Link className="lp-service-card" to={svc.to} key={svc.title}>
+            {services.map((svc, i) => (
+              <Link className="lp-service-card" to={svc.to} key={svc.title} data-reveal>
                 <span className="lp-service-icon"><svc.icon size={36} /></span>
                 <h3>{svc.title}</h3>
                 <p>{svc.body}</p>
@@ -212,7 +229,7 @@ const Home = () => {
 
         {/* ───── STATISTICS ───── */}
         <section className="lp-section lp-section-green">
-          <div className="lp-stats">
+          <div className="lp-stats" data-reveal>
             <div className="lp-stat">
               <span className="lp-stat-number"><AnimatedCounter end={programs.length} /></span>
               <span className="lp-stat-label">Programs</span>
@@ -234,7 +251,7 @@ const Home = () => {
 
         {/* ───── UPDATES (broadcasts + polls) ───── */}
         <section className="lp-section lp-section-light" id="updates">
-          <div className="lp-section-heading">
+          <div className="lp-section-heading" data-reveal>
             <p className="lp-eyebrow">Public broadcast</p>
             <h2>Programs, notices &amp; polls</h2>
             <p className="lp-section-sub">
@@ -326,13 +343,13 @@ const Home = () => {
 
         {/* ───── HOW IT WORKS ───── */}
         <section className="lp-section">
-          <div className="lp-section-heading">
+          <div className="lp-section-heading" data-reveal>
             <p className="lp-eyebrow">How a complaint moves</p>
             <h2>From your word to a closed case</h2>
           </div>
           <div className="lp-steps">
-            {steps.map((step) => (
-              <article className="lp-step" key={step.n}>
+            {steps.map((step, i) => (
+              <article className="lp-step" key={step.n} data-reveal>
                 <span className="lp-step-num">{step.n}</span>
                 <h3>{step.title}</h3>
                 <p>{step.body}</p>
@@ -343,7 +360,7 @@ const Home = () => {
 
         {/* ───── CTA ───── */}
         <section className="lp-section lp-section-gold">
-          <div className="lp-cta">
+          <div className="lp-cta" data-reveal>
             <h2>Have a concern to raise?</h2>
             <p>
               File a complaint directly with the MLA office and track it
@@ -357,7 +374,7 @@ const Home = () => {
 
         {/* ───── FOOTER ───── */}
         <footer className="lp-footer">
-          <div className="lp-footer-inner">
+          <div className="lp-footer-inner" data-reveal>
             <div className="lp-footer-brand">
               <span className="lp-footer-seal">
                 <svg viewBox="0 0 40 40" aria-hidden="true">
