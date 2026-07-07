@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48">
+  <circle cx="24" cy="24" r="23" fill="#0E3B2C"/>
+  <circle cx="24" cy="24" r="19" fill="none" stroke="#C79A3E" stroke-width="1.4"/>
+  <circle cx="24" cy="24" r="16.5" fill="none" stroke="#C79A3E" stroke-width="1"/>
+  <text x="24" y="30" font-family="Georgia, 'Times New Roman', serif" font-size="17" font-weight="700" fill="#F7F1E1" text-anchor="middle">KC</text>
+</svg>
