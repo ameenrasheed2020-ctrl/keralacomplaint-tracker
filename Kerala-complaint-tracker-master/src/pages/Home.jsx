@@ -117,7 +117,7 @@ const Home = () => {
               stay informed about programs, notices, and local initiatives.
             </p>
             <div className="lp-hero-actions">
-              <Link className="lp-btn lp-btn-primary" to="/complaints/new">
+              <Link  style={{paddingRight:"10px"}}className="lp-btn lp-btn-primary" to="/complaints/new">
                 File a Complaint
               </Link>
               <a className="lp-btn lp-btn-outline" href="#updates">
