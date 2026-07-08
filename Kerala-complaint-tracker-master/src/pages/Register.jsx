@@ -1,44 +1,24 @@
-import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import heroPhoto from '../assets/mla-crowd-wave.jpg'
-
-const DEFAULT_OTP = '1234'
 
 const Register = () => {
   const navigate = useNavigate()
-  const [step, setStep] = useState('phone')
-  const [phone, setPhone] = useState('')
+  const { t } = useTranslation()
 
-  const handleSendOtp = (event) => {
+  const handleSubmit = (event) => {
     event.preventDefault()
     const formData = new FormData(event.currentTarget)
-    const p = formData.get('phone')
-    if (!p) return
-    setPhone(p)
-    setStep('otp')
-  }
-
-  const handleVerifyOtp = (event) => {
-    event.preventDefault()
-    const formData = new FormData(event.currentTarget)
-    const otp = formData.get('otp')
-
-    if (otp !== DEFAULT_OTP) return
-
     localStorage.setItem(
       'kct_user',
       JSON.stringify({
-        name: phone,
-        email: phone,
-        phone,
-        role: 'user',
+        name: formData.get('email'),
+        email: formData.get('email'),
+        role: 'staff',
       }),
     )
-
-    navigate('/')
+    navigate('/login')
   }
-
-  const handleBack = () => setStep('phone')
 
   return (
     <main className="auth-screen auth-screen--photo" style={{ backgroundImage: `url(${heroPhoto})` }}>
@@ -50,43 +30,25 @@ const Register = () => {
               <circle cx="20" cy="20" r="19" fill="none" stroke="currentColor" strokeWidth="1.2" />
               <circle cx="20" cy="20" r="15.5" fill="none" stroke="currentColor" strokeWidth="0.75" />
             </svg>
-            <span>KC</span>
+            <span>{t('auth.kc')}</span>
           </span>
           <div>
-            <p className="eyebrow">Public registration</p>
-            <h1>Register</h1>
+            <p className="eyebrow">{t('auth.staffRegistration')}</p>
+            <h1>{t('auth.register')}</h1>
           </div>
         </div>
-        <p>Create a public account to submit complaints and vote on polls.</p>
+        <p>{t('auth.registerDescription')}</p>
 
-        {step === 'phone' && (
-          <form className="auth-form" onSubmit={handleSendOtp}>
-            <label htmlFor="phone">Phone number</label>
-            <input id="phone" name="phone" type="tel" placeholder="+91 98765 43210" required />
-
-            <button type="submit">Send OTP</button>
-          </form>
-        )}
-
-        {step === 'otp' && (
-          <form className="auth-form" onSubmit={handleVerifyOtp}>
-            <p className="auth-otp-info">
-              OTP sent to <strong>{phone}</strong>
-            </p>
-
-            <label htmlFor="otp">Enter OTP</label>
-            <input id="otp" name="otp" type="text" inputMode="numeric" placeholder="1234" maxLength={4} required />
-
-            <button type="submit">Verify &amp; Register</button>
-
-            <button type="button" className="auth-back-btn" onClick={handleBack}>
-              Change phone number
-            </button>
-          </form>
-        )}
+        <form className="auth-form" onSubmit={handleSubmit}>
+          <label htmlFor="email">{t('auth.email')}</label>
+          <input id="email" name="email" type="email" placeholder={t('auth.emailPlaceholder')} required />
+          <label htmlFor="password">{t('auth.password')}</label>
+          <input id="password" name="password" type="password" placeholder={t('auth.createPasswordPlaceholder')} required />
+          <button type="submit">{t('auth.createAccount')}</button>
+        </form>
 
         <p className="auth-note">
-          Already registered? <Link to="/login">Login</Link>
+          {t('auth.alreadyRegistered')} <Link to="/login">{t('auth.login')}</Link>
         </p>
       </section>
     </main>

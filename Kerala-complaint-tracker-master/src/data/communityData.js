@@ -254,3 +254,31 @@ export const castVote = (pollId, option, voterId) => {
 
   return polls
 }
+
+const viewedComplaintsKey = 'kct_complaint_viewed'
+
+export const getViewedComplaints = () => {
+  return JSON.parse(localStorage.getItem(viewedComplaintsKey) || '[]')
+}
+
+export const markComplaintViewed = (id) => {
+  const viewed = getViewedComplaints()
+  if (!viewed.includes(id)) {
+    viewed.push(id)
+    localStorage.setItem(viewedComplaintsKey, JSON.stringify(viewed))
+  }
+}
+
+export const markMultipleComplaintsViewed = (ids) => {
+  const viewed = getViewedComplaints()
+  let changed = false
+  ids.forEach((id) => {
+    if (!viewed.includes(id)) {
+      viewed.push(id)
+      changed = true
+    }
+  })
+  if (changed) {
+    localStorage.setItem(viewedComplaintsKey, JSON.stringify(viewed))
+  }
+}

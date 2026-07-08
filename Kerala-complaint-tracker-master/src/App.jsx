@@ -1,5 +1,6 @@
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import './App.css'
+import './i18n/i18n'
 import ProtectedRoute from './components/ProtectedRoute'
 import RoleBasedRoute from './components/RoleBasedRoute'
 import Home from './pages/Home'
@@ -8,13 +9,15 @@ import Login from './pages/Login'
 import Register from './pages/Register'
 import AdminBroadcast from './pages/admin/AdminBroadcast'
 import AdminDashboard from './pages/admin/AdminDashboard'
-import AdminLogin from './pages/admin/AdminLogin'
-import AdminRegister from './pages/admin/AdminRegister'
+import AdminIdeas from './pages/admin/AdminIdeas'
+import AdminIdeaDetail from './pages/admin/AdminIdeaDetail'
 import Broadcast from './pages/staff/Broadcast'
 import Polls from './pages/staff/Polls'
 import StaffDashboard from './pages/staff/StaffDashboard'
+import StaffIdeas from './pages/staff/StaffIdeas'
 import ComplaintDetails from './pages/user/ComplaintDetails'
 import NewComplaint from './pages/user/NewComplaint'
+import NewIdea from './pages/user/NewIdea'
 
 if (typeof window !== 'undefined') {
   window.history.scrollRestoration = 'manual'
@@ -62,21 +65,22 @@ const App = () => {
           <Route path="/dashboard" element={<DashboardRedirect />} />
           <Route path="/complaints/new" element={<NewComplaint />} />
           <Route path="/complaints/:id" element={<ComplaintDetails />} />
+          <Route path="/ideas/new" element={<NewIdea />} />
         </Route>
 
         <Route element={<RoleBasedRoute allowedRoles={['staff']} />}>
           <Route path="/staff" element={<StaffDashboard />} />
           <Route path="/staff/broadcast" element={<Broadcast />} />
           <Route path="/staff/polls" element={<Polls />} />
+          <Route path="/staff/ideas" element={<StaffIdeas />} />
         </Route>
-
-        <Route path="/admin/login" element={<AdminLogin />} />
-        <Route path="/admin/register" element={<AdminRegister />} />
 
         <Route element={<RoleBasedRoute allowedRoles={['admin']} />}>
           <Route path="/admin" element={<Navigate to="/admin/dashboard" replace />} />
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
           <Route path="/admin/broadcast" element={<AdminBroadcast />} />
+          <Route path="/admin/ideas" element={<AdminIdeas />} />
+          <Route path="/admin/ideas/:id" element={<AdminIdeaDetail />} />
         </Route>
 
         <Route path="*" element={<Navigate to="/" replace />} />

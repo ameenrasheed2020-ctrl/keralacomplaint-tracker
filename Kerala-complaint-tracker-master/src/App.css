@@ -22,12 +22,14 @@ h3 {
 
 .eyebrow {
   margin: 0 0 10px;
-    color: #e2aa3e;
+  color: #e2aa3e;
   font-family: var(--font-mono);
   font-size: 12px;
   font-weight: 600;
   letter-spacing: 0.12em;
   text-transform: uppercase;
+   white-space: nowrap;
+  min-width: max-content;
 }
 
 /* ---------- shell shared by every page ---------- */
@@ -254,6 +256,23 @@ h3 {
 .nav-button:hover {
   border-color: var(--gold);
   background: rgba(185, 134, 46, 0.14);
+}
+
+.nav-lang-btn {
+  border: none;
+  padding: 6px 10px;
+  background: rgba(251, 246, 234, 0.1);
+  color: var(--gold-tint);
+  font-weight: 600;
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  border-radius: 3px;
+  transition: background 0.15s ease;
+}
+
+.nav-lang-btn:hover {
+  background: rgba(185, 134, 46, 0.2);
 }
 
 /* ===================================================================
@@ -2077,9 +2096,17 @@ color: #2b342e;  font-family: var(--font-mono);
 
 .auth-box-header {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 14px;
+  text-align: center;
+  gap: 6px;
   margin-bottom: 4px;
+}
+
+.auth-box-header div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .auth-box-header h1 {
@@ -2154,6 +2181,22 @@ color: #2b342e;  font-family: var(--font-mono);
   color: var(--green-700);
   font-weight: 700;
   text-decoration: none;
+}
+
+.auth-link-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--green-700);
+  font-weight: 700;
+  font-size: 14.5px;
+  cursor: pointer;
+  text-decoration: none;
+  font-family: inherit;
+}
+
+.auth-link-btn:hover {
+  text-decoration: underline;
 }
 
 .lp-hero-banner {
@@ -2613,6 +2656,466 @@ color: #2b342e;  font-family: var(--font-mono);
   .lp-footer-inner {
     padding: 28px 0;
   }
+
+  .feed-bar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+    padding: 0 16px;
+  }
+
+  .feed-bar .publish-create-btn {
+    width: 100%;
+    text-align: center;
+  }
+}
+
+/* ───── GOVERNMENT DIRECTORY ───── */
+
+.dir-page {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 0 0 64px;
+}
+
+.dir-hero {
+  position: relative;
+  padding: 56px 32px 40px;
+  background:
+    radial-gradient(circle at 90% -10%, rgba(184,145,47,0.14), transparent 45%),
+    var(--paper);
+  border-bottom: 2px solid var(--line-soft);
+  overflow: hidden;
+}
+
+.dir-hero-inner {
+  max-width: 1080px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 36px;
+  flex-wrap: wrap;
+}
+
+.dir-seal {
+  flex: 0 0 auto;
+  width: 112px;
+  height: 112px;
+  border-radius: 50%;
+  border: 2px solid var(--green-700);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  color: var(--green-700);
+  background: repeating-radial-gradient(circle, transparent 0 2px, rgba(20,61,43,0.04) 2px 3px);
+}
+
+.dir-seal::before {
+  content: "";
+  position: absolute;
+  inset: 8px;
+  border: 1px dashed var(--green-700);
+  border-radius: 50%;
+}
+
+.dir-seal-text {
+  font-family: 'Fraunces', serif;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-align: center;
+  line-height: 1.5;
+}
+
+.dir-seal-mal {
+  font-size: 15px;
+  font-weight: 600;
+  display: block;
+  margin-bottom: 2px;
+}
+
+.dir-hero-copy {
+  flex: 1 1 340px;
+  min-width: 280px;
+}
+
+.dir-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  color: var(--stamp, #9A2B25);
+  text-transform: uppercase;
+  margin: 0 0 10px;
+}
+
+.dir-title {
+  font-family: 'Fraunces', serif;
+  font-weight: 700;
+  font-size: clamp(30px, 4.4vw, 46px);
+  line-height: 1.06;
+  margin: 0 0 14px;
+  color: var(--green-700);
+}
+
+.dir-desc {
+  max-width: 520px;
+  color: var(--ink-soft);
+  font-size: 15.5px;
+  line-height: 1.55;
+  margin: 0;
+}
+
+.dir-stats {
+  display: flex;
+  gap: 28px;
+  margin-top: 22px;
+  flex-wrap: wrap;
+}
+
+.dir-stat b {
+  font-family: 'Fraunces', serif;
+  font-size: 26px;
+  color: var(--green-700);
+  display: block;
+}
+
+.dir-stat span {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--ink-soft);
+  letter-spacing: 0.04em;
+}
+
+/* ─── TABS ─── */
+
+.dir-tabs {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 18px 32px 0;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.dir-tab {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.03em;
+  border: 1px solid var(--line);
+  background: var(--cream-deep);
+  color: var(--ink-soft);
+  padding: 8px 14px;
+  border-radius: 3px;
+  cursor: pointer;
+  user-select: none;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  transition: all 0.15s ease;
+}
+
+.dir-tab .dir-tab-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.dir-tab.active {
+  background: var(--ink);
+  color: var(--paper);
+  border-color: var(--ink);
+}
+
+.dir-tab:hover {
+  border-color: var(--ink);
+}
+
+/* ─── MAP ─── */
+
+.dir-map-wrap {
+  max-width: 1080px;
+  margin: 20px auto 0;
+  padding: 0 32px;
+}
+
+.dir-map {
+  height: 440px;
+  border: 2px solid var(--ink);
+  border-radius: 2px;
+  filter: sepia(8%) saturate(92%);
+}
+
+.dir-marker-label {
+  background: rgba(246, 241, 228, 0.92);
+  border: 1px solid var(--ink);
+  border-radius: 4px;
+  padding: 2px 6px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--ink);
+  white-space: nowrap;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+}
+
+.dir-marker-icon {
+  background: none !important;
+  border: none !important;
+}
+
+.dir-marker-circle {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #fff;
+  box-shadow: 0 1px 6px rgba(0,0,0,0.25);
+  transition: transform 0.15s ease;
+}
+
+.dir-marker-circle svg {
+  width: 18px;
+  height: 18px;
+}
+
+@media (max-width: 600px) {
+  .dir-hero {
+    padding: 40px 18px 28px;
+  }
+  .dir-tabs,
+  .dir-map-wrap {
+    padding-left: 18px;
+    padding-right: 18px;
+  }
+}
+
+/* ───── WEATHER WIDGET ───── */
+.weather-widget {
+  background: rgba(246, 241, 228, 0.95);
+  border: 1.5px solid var(--ink);
+  border-radius: 6px;
+  padding: 8px 12px;
+  min-width: 160px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  line-height: 1.5;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+  pointer-events: auto;
+}
+.ww-loading, .ww-error {
+  text-align: center;
+  font-size: 13px;
+  color: var(--ink-light);
+}
+.ww-main {
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+  margin-bottom: 2px;
+}
+.ww-details {
+  color: var(--ink-light);
+  font-size: 10px;
+}
+.ww-alert {
+  margin-top: 4px;
+  padding: 3px 6px;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 3px;
+  font-size: 10px;
+  font-weight: 600;
+  color: #b91c1c;
+}
+.ww-footer {
+  margin-top: 3px;
+  font-size: 9px;
+  color: var(--ink-light);
+  text-align: right;
+  border-top: 1px solid var(--border);
+  padding-top: 3px;
+}
+
+/* ───── FLOOD TOOLTIP ───── */
+.flood-tooltip {
+  background: rgba(246, 241, 228, 0.95);
+  border: 1px solid var(--ink);
+  border-radius: 4px;
+  padding: 4px 8px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--ink);
+  white-space: nowrap;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+}
+
+/* ───── MAP LEGEND ───── */
+.map-legend {
+  background: rgba(246, 241, 228, 0.92);
+  border: 1.5px solid var(--ink);
+  border-radius: 4px;
+  padding: 6px 10px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  line-height: 1.6;
+}
+.map-legend-title {
+  font-weight: 700;
+  font-size: 10px;
+  margin-bottom: 2px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.map-legend-row {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.map-legend-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  border: 1px solid rgba(0,0,0,0.2);
+  flex-shrink: 0;
+}
+
+/* ───── ROAD REPORT TOOLBAR ───── */
+.road-toolbar {
+  max-width: 1080px;
+  margin: 12px auto 0;
+  padding: 0 32px;
+}
+.road-filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+.road-filter-btn {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  padding: 4px 10px;
+  border: 1.5px solid var(--ink);
+  border-radius: 20px;
+  background: transparent;
+  color: var(--ink);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s ease;
+}
+.road-filter-btn:hover {
+  background: var(--ink);
+  color: var(--paper);
+}
+.road-filter-btn.active {
+  background: var(--ink);
+  color: var(--paper);
+}
+.road-filter-btn.road-resolve-btn.active {
+  background: #9A2B25;
+  border-color: #9A2B25;
+  color: #fff;
+}
+
+/* ───── ROAD REPORT FORM ───── */
+.road-report-overlay {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 20px;
+  pointer-events: none;
+}
+.road-report-form {
+  pointer-events: auto;
+  background: var(--paper);
+  border: 2px solid var(--ink);
+  border-radius: 8px;
+  padding: 16px;
+  max-width: 340px;
+  width: 90%;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+}
+.road-report-select {
+  width: 100%;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  padding: 6px 8px;
+  border: 1.5px solid var(--ink);
+  border-radius: 4px;
+  background: var(--paper);
+  color: var(--ink);
+  margin-bottom: 6px;
+}
+.road-report-textarea {
+  width: 100%;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  padding: 6px 8px;
+  border: 1.5px solid var(--ink);
+  border-radius: 4px;
+  background: var(--paper);
+  color: var(--ink);
+  resize: vertical;
+  box-sizing: border-box;
+}
+.road-report-textarea:focus,
+.road-report-select:focus {
+  outline: none;
+  border-color: var(--ink);
+  box-shadow: 0 0 0 2px rgba(0,0,0,0.08);
+}
+.road-report-btn {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  padding: 6px 14px;
+  border: 1.5px solid var(--ink);
+  border-radius: 4px;
+  background: transparent;
+  color: var(--ink);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.road-report-btn:hover {
+  background: var(--ink);
+  color: var(--paper);
+}
+.road-report-btn-primary {
+  background: var(--ink);
+  color: var(--paper);
+}
+.road-report-btn-primary:hover {
+  background: #1a1a2e;
+}
+.road-report-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* ───── ROAD MARKER ───── */
+.road-marker-circle {
+  border: 2px dashed #fff !important;
+}
+.road-marker-circle svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* ───── ROAD PLACEMENT STATUS ───── */
+.road-placement-status {
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  padding: 6px 12px;
+  margin-bottom: 8px;
+  background: var(--paper);
+  border: 1.5px solid var(--ink);
+  border-radius: 4px;
+  color: var(--ink);
 }
 
 @media (max-width: 480px) {
