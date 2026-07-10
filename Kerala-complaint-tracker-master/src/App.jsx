@@ -18,6 +18,7 @@ import StaffIdeas from './pages/staff/StaffIdeas'
 import ComplaintDetails from './pages/user/ComplaintDetails'
 import NewComplaint from './pages/user/NewComplaint'
 import NewIdea from './pages/user/NewIdea'
+import ChatBot from './components/ChatBot'
 
 if (typeof window !== 'undefined') {
   window.history.scrollRestoration = 'manual'
@@ -85,6 +86,7 @@ const App = () => {
 
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
+      <ChatBot />
     </BrowserRouter>
   )
 }
