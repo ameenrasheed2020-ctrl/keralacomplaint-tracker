@@ -1,4 +1,4 @@
-const API_KEY = () => import.meta.env.VITE_GEMINI_API_KEY || ''
+const API_KEY = () => window.__VENGARA_API_KEY || import.meta.env.VITE_GEMINI_API_KEY || ''
 
 const FALLBACK = [
   'I can only answer questions about Vengara constituency.',
