@@ -1,4 +1,16 @@
-const API_KEY = () => window.__VENGARA_API_KEY || import.meta.env.VITE_GEMINI_API_KEY || ''
+let cachedKey = null
+
+const getKey = async () => {
+  if (cachedKey) return cachedKey
+  try {
+    const res = await fetch('/api/config')
+    const data = await res.json()
+    cachedKey = data.geminiApiKey
+    return cachedKey
+  } catch {
+    return import.meta.env.VITE_GEMINI_API_KEY || ''
+  }
+}
 
 const FALLBACK = [
   'I can only answer questions about Vengara constituency.',
@@ -105,9 +117,9 @@ LIVE DATA COMMANDS (include these in your response if relevant):
 - fetch_polls — active polls in the constituency`
 
 export async function askVengaraAI(userMessage, conversationHistory) {
-  const apiKey = API_KEY()
+  const apiKey = await getKey()
   if (!apiKey) {
-    return 'Please set VITE_GEMINI_API_KEY in your .env file to use the AI assistant.'
+    return 'Gemini API key not configured. Ask the admin to set VITE_GEMINI_API_KEY in Railway dashboard.'
   }
   try {
     const contents = []
@@ -136,7 +148,7 @@ export async function askVengaraAI(userMessage, conversationHistory) {
       console.error('Gemini API error:', data)
       const msg = data.error?.message || ''
       if (msg.includes('API_KEY') || msg.includes('not found') || msg.includes('API key')) {
-        return 'Invalid or missing Gemini API key. Set a valid VITE_GEMINI_API_KEY in your .env file.'
+        return 'Invalid or missing Gemini API key. Set a valid VITE_GEMINI_API_KEY in Railway dashboard.'
       }
       if (msg.includes('quota') || msg.includes('RESOURCE_EXHAUSTED')) {
         return 'Gemini API quota exceeded. The free tier has a daily limit — try again later or get a new key at https://aistudio.google.com/apikey'
