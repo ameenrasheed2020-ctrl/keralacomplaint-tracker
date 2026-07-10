@@ -8,6 +8,8 @@ import Detail from './pages/Detail'
 import Login from './pages/Login'
 import Register from './pages/Register'
 import AdminBroadcast from './pages/admin/AdminBroadcast'
+import AdminComplaintDetail from './pages/admin/AdminComplaintDetail'
+import AdminComplaints from './pages/admin/AdminComplaints'
 import AdminDashboard from './pages/admin/AdminDashboard'
 import AdminIdeas from './pages/admin/AdminIdeas'
 import AdminIdeaDetail from './pages/admin/AdminIdeaDetail'
@@ -18,6 +20,8 @@ import StaffIdeas from './pages/staff/StaffIdeas'
 import ComplaintDetails from './pages/user/ComplaintDetails'
 import NewComplaint from './pages/user/NewComplaint'
 import NewIdea from './pages/user/NewIdea'
+import TrackComplaint from './pages/user/TrackComplaint'
+import UserDashboard from './pages/user/UserDashboard'
 import ChatBot from './components/ChatBot'
 
 if (typeof window !== 'undefined') {
@@ -37,15 +41,12 @@ const DashboardRedirect = () => {
     return <Navigate to="/admin/dashboard" replace />
   }
 
-  return <Navigate to="/" replace />
+  return <Navigate to="/user/dashboard" replace />
 }
 
 const Landing = () => {
   const user = getUser()
 
-  // Staff and MLA-office accounts have their own work views; everyone
-  // else (public users and guests) lands on the public page, since that's
-  // now also where the broadcast feed and polls live.
   if (user?.role === 'staff' || user?.role === 'admin') {
     return <DashboardRedirect />
   }
@@ -64,6 +65,8 @@ const App = () => {
 
         <Route element={<ProtectedRoute />}>
           <Route path="/dashboard" element={<DashboardRedirect />} />
+          <Route path="/user/dashboard" element={<UserDashboard />} />
+          <Route path="/track" element={<TrackComplaint />} />
           <Route path="/complaints/new" element={<NewComplaint />} />
           <Route path="/complaints/:id" element={<ComplaintDetails />} />
           <Route path="/ideas/new" element={<NewIdea />} />
@@ -82,6 +85,8 @@ const App = () => {
           <Route path="/admin/broadcast" element={<AdminBroadcast />} />
           <Route path="/admin/ideas" element={<AdminIdeas />} />
           <Route path="/admin/ideas/:id" element={<AdminIdeaDetail />} />
+          <Route path="/admin/complaints" element={<AdminComplaints />} />
+          <Route path="/admin/complaints/:id" element={<AdminComplaintDetail />} />
         </Route>
 
         <Route path="*" element={<Navigate to="/" replace />} />

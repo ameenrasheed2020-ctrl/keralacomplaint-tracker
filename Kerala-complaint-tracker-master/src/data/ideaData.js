@@ -1,68 +1,50 @@
-const ideasKey = 'kct_public_ideas'
+const KEY = 'kct_ideas'
 
-const seedIdeas = [
-  {
-    id: 'IDEA-001',
-    title: 'Install more street lights in Ward 3',
-    category: 'Infrastructure',
-    description: 'Many roads in Ward 3 are completely dark at night. Installing LED street lights will improve safety for women and elderly residents.',
-    userId: 'guest@example.com',
-    userName: 'Anonymous',
-    status: 'pending',
-    date: '01 Jul 2026',
-    viewed: true,
-  },
-  {
-    id: 'IDEA-002',
-    title: 'Weekly farmers market at Edappally',
-    category: 'Agriculture',
-    description: 'Setting up a weekly farmers market will help local farmers sell directly to residents and reduce middlemen.',
-    userId: 'guest@example.com',
-    userName: 'Anonymous',
-    status: 'reviewed',
-    date: '28 Jun 2026',
-    viewed: true,
-  },
-]
-
-export const getIdeas = () => {
-  return JSON.parse(localStorage.getItem(ideasKey) || JSON.stringify(seedIdeas))
+function save(d) {
+  localStorage.setItem(KEY, JSON.stringify(d))
 }
 
-export const saveIdeas = (ideas) => {
-  localStorage.setItem(ideasKey, JSON.stringify(ideas))
+export function getIdeas() {
+  const s = localStorage.getItem(KEY)
+  return s ? JSON.parse(s) : []
 }
 
-export const addIdea = ({ title, category, description }, user) => {
-  const ideas = getIdeas()
-  const newIdea = {
-    id: `IDEA-${String(ideas.length + 1).padStart(3, '0')}`,
-    title,
-    category,
-    description,
-    userId: user?.email || 'anonymous',
-    userName: user?.name || user?.phone || 'Anonymous',
+export function addIdea(data, user) {
+  const list = getIdeas()
+  const pad = String(list.length + 101).slice(-3)
+  const item = {
+    id: 'IDEA-' + pad,
+    title: data.title || '',
+    description: data.description || '',
+    files: data.files || [],
+    userId: user?.id || 'anonymous',
+    userName: user?.name || 'Anonymous',
+    userPhone: user?.phone || '',
+    date: new Date().toISOString().split('T')[0],
     status: 'pending',
-    date: new Date().toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }),
-    viewed: false,
+    votes: 0,
   }
-  const next = [newIdea, ...ideas]
-  saveIdeas(next)
-  return next
+  list.push(item)
+  save(list)
+  return [item, list.length]
 }
 
-export const updateIdeaStatus = (id, status) => {
-  const ideas = getIdeas().map((idea) =>
-    idea.id === id ? { ...idea, status } : idea
-  )
-  saveIdeas(ideas)
-  return ideas
+export function updateIdeaStatus(id, status) {
+  const list = getIdeas()
+  for (let i = 0; i < list.length; i++) {
+    if (list[i].id === id) { list[i].status = status; break }
+  }
+  save(list)
+  return list
 }
 
-export const markIdeasViewed = (ids) => {
-  const ideas = getIdeas().map((idea) =>
-    ids.includes(idea.id) && !idea.viewed ? { ...idea, viewed: true } : idea
-  )
-  saveIdeas(ideas)
-  return ideas
+export function markIdeasViewed(ids) {
+  const list = getIdeas()
+  for (let i = 0; i < list.length; i++) {
+    for (let j = 0; j < ids.length; j++) {
+      if (list[i].id === ids[j]) { list[i].viewed = true; break }
+    }
+  }
+  save(list)
+  return list
 }

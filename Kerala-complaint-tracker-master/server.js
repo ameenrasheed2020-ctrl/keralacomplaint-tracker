@@ -15,7 +15,7 @@ app.get('/api/config', (_req, res) => {
 
 app.use(express.static(dist, { index: false }))
 
-app.get('*', (_req, res) => {
+app.get('/{*path}', (_req, res) => {
   try {
     const html = readFileSync(join(dist, 'index.html'), 'utf-8')
     res.setHeader('Content-Type', 'text/html')

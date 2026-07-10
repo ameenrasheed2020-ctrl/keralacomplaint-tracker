@@ -41,7 +41,7 @@ const StaffDashboard = () => {
             {assignedComplaints.map((complaint) => (
               <article className="table-row" key={complaint.id}>
                 <div>
-                  <strong>{complaint.title}</strong>
+                  <strong className="complaint-title" title={complaint.title}>{complaint.title}</strong>
                   <span>{complaint.id}</span>
                 </div>
                 <div>

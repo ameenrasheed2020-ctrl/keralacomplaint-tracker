@@ -1,91 +1,56 @@
-import { useState, useEffect } from 'react'
-import { useNavigate, useLocation } from 'react-router-dom'
-import { useTranslation } from 'react-i18next'
+import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import Navbar from '../../components/Navbar'
-import { addIdea, getIdeas } from '../../data/ideaData'
-
-const categories = [
-  { key: 'Infrastructure', label: 'ideas.catInfrastructure' },
-  { key: 'Health & Sanitation', label: 'ideas.catHealth' },
-  { key: 'Education', label: 'ideas.catEducation' },
-  { key: 'Agriculture', label: 'ideas.catAgriculture' },
-  { key: 'Public Safety', label: 'ideas.catSafety' },
-  { key: 'Environment', label: 'ideas.catEnvironment' },
-  { key: 'Culture & Sports', label: 'ideas.catCulture' },
-  { key: 'Other', label: 'ideas.catOther' },
-]
+import { addIdea } from '../../data/ideaData'
 
 const NewIdea = () => {
-  const { t } = useTranslation()
   const navigate = useNavigate()
-  const location = useLocation()
-  const ideaMessage = location.state?.message
-  const user = JSON.parse(localStorage.getItem('kct_user') || 'null')
-  const [submitted, setSubmitted] = useState(false)
-  const [latestIdea, setLatestIdea] = useState(null)
+  const [files, setFiles] = useState([])
+  const [done, setDone] = useState(false)
 
-  const handleSubmit = (event) => {
-    event.preventDefault()
-    const formData = new FormData(event.currentTarget)
-    const next = addIdea(
-      {
-        title: formData.get('title'),
-        category: formData.get('category'),
-        description: formData.get('description'),
-      },
-      user,
-    )
-    const created = next[0]
-    setLatestIdea(created)
-    setSubmitted(true)
-
-    const myIdeas = JSON.parse(localStorage.getItem('kct_my_ideas') || '[]')
-    if (!myIdeas.includes(created.id)) {
-      myIdeas.push(created.id)
-      localStorage.setItem('kct_my_ideas', JSON.stringify(myIdeas))
+  function pickFiles(e) {
+    const picked = Array.from(e.target.files)
+    const out = []
+    for (let i = 0; i < picked.length; i++) {
+      const f = picked[i]
+      if (f.size > 2 * 1024 * 1024) { alert('File too big (max 2MB)'); return }
+      const r = new FileReader()
+      r.onload = () => {
+        out.push({ name: f.name, type: f.type, data: r.result })
+        if (out.length === picked.length) setFiles(prev => [...prev, ...out])
+      }
+      r.readAsDataURL(f)
     }
+    if (picked.length > 0) e.target.value = ''
   }
 
-  useEffect(() => {
-    if (submitted && latestIdea) {
-      const interval = setInterval(() => {
-        const updated = getIdeas().find((i) => i.id === latestIdea.id)
-        if (updated) setLatestIdea(updated)
-      }, 5000)
-      return () => clearInterval(interval)
-    }
-  }, [submitted])
+  function removeFile(i) {
+    const next = []
+    for (let j = 0; j < files.length; j++) if (j !== i) next.push(files[j])
+    setFiles(next)
+  }
 
-  if (submitted) {
+  function submit(e) {
+    e.preventDefault()
+    const fd = new FormData(e.target)
+    const user = JSON.parse(localStorage.getItem('kct_user') || '{}')
+    addIdea({
+      title: fd.get('title'),
+      description: fd.get('description'),
+      files,
+    }, user)
+    setDone(true)
+  }
+
+  if (done) {
     return (
       <>
         <Navbar />
-        <main className="page-shell narrow">
-        <section className="page-heading">
-          <div>
-            <p className="eyebrow">{t('ideas.eyebrow')}</p>
-            <h1>{t('ideas.thanks')}</h1>
-          </div>
-        </section>
-          <section className="table-panel">
-            <p>{t('ideas.thanksBody')}</p>
-            {latestIdea && (
-              <p style={{ marginTop: 12, display: 'flex', alignItems: 'center', gap: 8 }}>
-                <span style={{
-                  display: 'inline-flex', alignItems: 'center', gap: 6,
-                  fontSize: '13px', fontWeight: 600,
-                  color: latestIdea.viewed ? 'var(--green-700)' : 'var(--ink-faint)',
-                }}>
-                  <span style={{ fontSize: '16px' }}>{latestIdea.viewed ? '✓' : '○'}</span>
-                  {latestIdea.viewed ? 'Seen by MLA office' : 'Awaiting review'}
-                </span>
-              </p>
-            )}
-            <button className="lp-btn lp-btn-primary" style={{ marginTop: 16 }} onClick={() => navigate('/')}>
-              {t('ideas.backHome')}
-            </button>
-          </section>
-        </main>
+        <div style={{ maxWidth: 500, margin: '0 auto', padding: 20, textAlign: 'center' }}>
+          <h1>Idea Submitted!</h1>
+          <p>The admin will review your suggestion.</p>
+          <button onClick={() => navigate('/dashboard')} style={{ marginTop: 16, padding: '8px 20px', background: '#166534', color: 'white', border: 'none', borderRadius: 6, cursor: 'pointer' }}>Dashboard</button>
+        </div>
       </>
     )
   }
@@ -93,37 +58,28 @@ const NewIdea = () => {
   return (
     <>
       <Navbar />
-      <main className="page-shell narrow">
-        <section className="page-heading">
-          <div>
-            <p className="eyebrow">{t('ideas.eyebrow')}</p>
-            <h1>{t('ideas.heading')}</h1>
-            <p>{t('ideas.description')}</p>
-          </div>
-        </section>
+      <div style={{ maxWidth: 500, margin: '0 auto', padding: 20 }}>
+        <h1>New Idea</h1>
+        <form onSubmit={submit}>
+          <label>Title</label>
+          <input name="title" required style={{ display: 'block', width: '100%', marginBottom: 10, padding: 8 }} />
 
-        {ideaMessage && (
-          <p style={{ margin: '4px 0 16px', color: '#e2aa3e', fontSize: '13px', fontWeight: 500 }}>{ideaMessage}</p>
-        )}
+          <label>Description</label>
+          <textarea name="description" rows={5} required style={{ display: 'block', width: '100%', marginBottom: 10, padding: 8, resize: 'vertical' }} />
 
-        <form className="panel-form" onSubmit={handleSubmit}>
-          <label htmlFor="title">{t('ideas.titleLabel')}</label>
-          <input id="title" name="title" type="text" placeholder={t('ideas.titlePlaceholder')} required />
-
-          <label htmlFor="category">{t('ideas.categoryLabel')}</label>
-          <select id="category" name="category" required>
-            <option value="" disabled>{t('ideas.categoryPlaceholder')}</option>
-            {categories.map((cat) => (
-              <option key={cat.key} value={cat.key}>{t(cat.label)}</option>
+          <label>Attachments (optional)</label>
+          <div style={{ marginBottom: 10 }}>
+            <input type="file" multiple accept="image/*,.pdf" onChange={pickFiles} />
+            {files.map((f, i) => (
+              <span key={i} style={{ display: 'inline-flex', alignItems: 'center', gap: 4, background: '#eee', padding: '3px 8px', borderRadius: 4, margin: 3, fontSize: 13 }}>
+                {f.name} <span onClick={() => removeFile(i)} style={{ cursor: 'pointer', fontWeight: 700 }}>x</span>
+              </span>
             ))}
-          </select>
+          </div>
 
-          <label htmlFor="description">{t('ideas.descriptionLabel')}</label>
-          <textarea id="description" name="description" rows="5" placeholder={t('ideas.descriptionPlaceholder')} required />
-
-          <button type="submit">{t('ideas.submit')}</button>
+          <button type="submit" style={{ padding: '8px 20px', background: '#166534', color: 'white', border: 'none', borderRadius: 6, cursor: 'pointer' }}>Submit</button>
         </form>
-      </main>
+      </div>
     </>
   )
 }

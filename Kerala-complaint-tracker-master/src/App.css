@@ -1155,6 +1155,26 @@ h3 {
   line-height: 1.1;
 }
 
+.complaint-detail-heading {
+  display: block;
+  max-width: none;
+  text-align: center;
+}
+
+.complaint-detail-heading .back-link {
+  display: block;
+  margin-bottom: 18px;
+  text-align: left;
+}
+
+.complaint-title {
+  display: block;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 /* ---------- stat ledger tiles ---------- */
 
 .stat-grid {
@@ -1171,6 +1191,16 @@ h3 {
   background: var(--paper);
   border: 1px solid var(--line);
   border-top: 3px solid var(--gold);
+}
+
+.stat-card--clickable {
+  cursor: pointer;
+}
+
+.stat-card--clickable:hover,
+.stat-card--clickable:focus-visible {
+  border-color: var(--green-700);
+  outline: none;
 }
 
 .stat-card strong {
@@ -3270,6 +3300,11 @@ color: #2b342e;  font-family: var(--font-mono);
 }
 
 /* ───── SCROLL REVEAL ───── */
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
 
 @keyframes reveal-up {
   from {

@@ -1,0 +1,89 @@
+flowchart LR
+    subgraph User["User"]
+        U[Logged In]
+        UC[File Complaint]
+        UI[Submit Idea]
+        UT[Track Complaint]
+        UD[View Dashboard]
+        UM[View Map]
+    end
+
+    subgraph System["Application"]
+        Pending((Pending))
+        InProg((In Progress))
+        FieldVisit((Field Visit))
+        Resolved((Resolved))
+        Declined((Declined))
+        IdeaPending((Pending))
+        IdeaApproved((Approved))
+        IdeaRejected((Rejected))
+    end
+
+    subgraph Admin["Admin / Staff"]
+        A[Login]
+        ADash[Admin Dashboard]
+        AComps[Complaints List]
+        AComp[Complaint Detail]
+        AIdeas[Ideas List]
+        AUpdate[Update Status]
+    end
+
+    UC --> Pending
+    UI --> IdeaPending
+
+    Pending --> InProg
+    InProg --> FieldVisit
+    FieldVisit --> Resolved
+    FieldVisit --> Declined
+
+    Pending --> Declined
+    InProg --> Resolved
+
+    IdeaPending --> IdeaApproved
+    IdeaPending --> IdeaRejected
+
+    A --> ADash
+    A --> AComps
+    A --> AComp
+    A --> AIdeas
+    ADash --> AComps
+
+    AComps --> AComp
+    AComp --> AUpdate
+    AUpdate --> Pending
+    AUpdate --> InProg
+    AUpdate --> FieldVisit
+    AUpdate --> Resolved
+    AUpdate --> Declined
+
+    AIdeas --> IdeaPending
+    AIdeas --> IdeaApproved
+    AIdeas --> IdeaRejected
+
+    UT --> |Enter Tracking ID| AComp
+    UD --> UC
+    UD --> UT
+    UD --> UI
+
+    subgraph ChatBot["ChatBot"]
+        C[User Message]
+        CK{Keyword Match?}
+        CL[Fetch Local Data]
+        CG[Call Gemini API]
+        CR[Display Response]
+    end
+
+    C --> CK
+    CK -->|Yes| CL
+    CK -->|No| CG
+    CL --> CR
+    CG --> CR
+
+    style Pending fill:#f59e0b,color:white
+    style InProg fill:#3b82f6,color:white
+    style FieldVisit fill:#8b5cf6,color:white
+    style Resolved fill:#22c55e,color:white
+    style Declined fill:#ef4444,color:white
+    style IdeaPending fill:#f59e0b,color:white
+    style IdeaApproved fill:#22c55e,color:white
+    style IdeaRejected fill:#ef4444,color:white

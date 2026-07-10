@@ -53,12 +53,15 @@ const Navbar = () => {
           {(!user || user?.role === 'user') && <Link className="nav-link-tab" to="/" state={{ tab: 'programs' }} onClick={closeMenu}>{t('nav.programs')}</Link>}
           {(!user || user?.role === 'user') && <Link className="nav-link-tab" to="/" state={{ tab: 'notifications' }} onClick={closeMenu}>{t('nav.notifications')}</Link>}
           {(!user || user?.role === 'user') && <Link className="nav-link-tab" to="/" state={{ tab: 'polls' }} onClick={closeMenu}>{t('nav.polls')}</Link>}
+          {user?.role === 'user' && <NavLink to="/user/dashboard">Dashboard</NavLink>}
+          {user?.role === 'user' && <NavLink to="/track">Track</NavLink>}
           {user?.role === 'staff' && <NavLink to="/staff">{t('nav.queue')}</NavLink>}
           {user?.role === 'staff' && <NavLink to="/staff/broadcast">{t('nav.broadcast')}</NavLink>}
           {user?.role === 'staff' && <NavLink to="/staff/polls">{t('nav.polls')}</NavLink>}
           {user?.role === 'staff' && <NavLink to="/staff/ideas">{t('nav.ideas')}</NavLink>}
           {user?.role === 'admin' && <NavLink to="/admin/dashboard">{t('nav.overview')}</NavLink>}
           {user?.role === 'admin' && <NavLink to="/admin/broadcast">{t('nav.broadcast')}</NavLink>}
+          {user?.role === 'admin' && <NavLink to="/admin/complaints">Complaints</NavLink>}
           {user?.role === 'admin' && <NavLink to="/admin/ideas">{t('nav.ideas')}</NavLink>}
         </nav>
 

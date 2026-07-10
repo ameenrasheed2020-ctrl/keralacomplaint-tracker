@@ -3,7 +3,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
-import { LuClipboardList, LuTrendingUp, LuChartBarIncreasing, LuLightbulb } from 'react-icons/lu'
+import { LuClipboardList, LuTrendingUp, LuChartBarIncreasing, LuLightbulb, LuNewspaper } from 'react-icons/lu'
 import Navbar from '../components/Navbar'
 import AnimatedCounter from '../components/AnimatedCounter'
 import PollCard from './PollCard'
@@ -83,6 +83,38 @@ const Home = () => {
   const [placingLng2, setPlacingLng2] = useState(null)
   const [secondClickMode, setSecondClickMode] = useState(false)
   const roadLayerRef = useRef(null)
+
+  const [news, setNews] = useState([])
+  const [newsError, setNewsError] = useState('')
+  const [newsIndex, setNewsIndex] = useState(0)
+
+  function fetchNews() {
+    const rss = 'https://news.google.com/rss/search?q=Vengara+Kerala&hl=en-IN&gl=IN&ceid=IN:en'
+    const url = 'https://api.rss2json.com/v1/api.json?rss_url=' + encodeURIComponent(rss)
+    fetch(url).then(r => r.json()).then(d => {
+      if (d.status === 'ok') {
+        const out = []
+        for (let i = 0; i < d.items.length && i < 8; i++) {
+          const item = d.items[i]
+          out.push({ title: item.title, link: item.link, date: item.pubDate ? item.pubDate.split(' ')[0] : '', source: item.author || 'News' })
+        }
+        setNews(out)
+        setNewsError('')
+      }
+    }).catch(() => setNewsError('Could not load news'))
+  }
+
+  useEffect(() => {
+    fetchNews()
+    const id = setInterval(fetchNews, 300000)
+    return () => clearInterval(id)
+  }, [])
+
+  useEffect(() => {
+    if (news.length < 2) return
+    const id = setInterval(() => setNewsIndex(i => (i + 1) % news.length), 5000)
+    return () => clearInterval(id)
+  }, [news.length])
 
   useEffect(() => {
     if (mapInstance.current) return
@@ -229,6 +261,11 @@ const Home = () => {
     layer.addTo(map)
     roadLayerRef.current = layer
   }, [roadReports, roadFilter])
+
+  useEffect(() => {
+    const id = setInterval(() => setRoadReports(getRoadReports()), 30000)
+    return () => clearInterval(id)
+  }, [])
 
   useEffect(() => {
     const map = mapInstance.current
@@ -689,6 +726,35 @@ const Home = () => {
               </div>
             )}
             <div ref={mapRef} className="dir-map" />
+          </div>
+        </section>
+
+        {/* ───── VENGARA NEWS ───── */}
+        <section className="lp-section">
+          <div className="lp-section-heading" data-reveal>
+            <p className="lp-eyebrow"><LuNewspaper size={16} style={{marginRight:6}} />Vengara News</p>
+            <h2>Latest News</h2>
+          </div>
+          <div style={{position:'relative',background:'linear-gradient(135deg,#1a3a5c,#2563eb)',borderRadius:12,padding:'28px 24px',color:'white',minHeight:100}}>
+            {newsError && <p style={{color:'rgba(255,255,255,0.7)',textAlign:'center',margin:0}}>{newsError}</p>}
+            {news.length === 0 && !newsError && <p style={{color:'rgba(255,255,255,0.7)',textAlign:'center',margin:0}}>Loading news...</p>}
+            {news.length > 0 && (
+              <a key={newsIndex} href={news[newsIndex].link} target="_blank" rel="noopener noreferrer"
+                style={{textDecoration:'none',color:'white',display:'block',animation:'fadeIn 0.5s'}}>
+                <div style={{fontSize:13,opacity:0.7,marginBottom:6}}>
+                  <LuNewspaper size={14} style={{marginRight:6}} />{news[newsIndex].source} · {news[newsIndex].date}
+                </div>
+                <div style={{fontSize:17,fontWeight:600,lineHeight:1.4}}>{news[newsIndex].title}</div>
+              </a>
+            )}
+            {news.length > 1 && (
+              <div style={{display:'flex',justifyContent:'center',gap:6,marginTop:16}}>
+                {news.map((_, i) => (
+                  <div key={i} onClick={() => setNewsIndex(i)}
+                    style={{width:8,height:8,borderRadius:'50%',background:i === newsIndex ? 'white' : 'rgba(255,255,255,0.4)',cursor:'pointer',transition:'0.3s'}} />
+                ))}
+              </div>
+            )}
           </div>
         </section>
 
